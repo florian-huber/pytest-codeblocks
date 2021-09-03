@@ -69,6 +69,8 @@ class Codeblock(pytest.Item):
             code_striped = self.obj.code.lstrip(">>>").strip()
             if not code_striped.startswith("print"):
                 self.obj.code = "print(" + code_striped + ")"
+            else:
+                self.obj.code = code_striped
             output = self.run_python()
         else:
             assert self.obj.syntax in ["sh", "bash"]
