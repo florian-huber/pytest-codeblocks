@@ -1,4 +1,4 @@
-def test_expected_output_w_print(testdir):
+def test_expected_output_print(testdir):
     string = """
     Lorem ipsum
     ```idle
@@ -15,7 +15,7 @@ def test_expected_output_w_print(testdir):
     result.assert_outcomes(passed=1)
 
 
-def test_expected_output_w_print(testdir):
+def test_expected_output_without_print(testdir):
     string = """
     Lorem ipsum
     ```idle
