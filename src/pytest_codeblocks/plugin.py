@@ -60,7 +60,7 @@ class Codeblock(pytest.Item):
                         + f"{e}"
                     )
             return s.getvalue()
- 
+
     def runtest(self):
         output = None
         if self.obj.syntax == "python":
@@ -69,7 +69,7 @@ class Codeblock(pytest.Item):
             code_striped = self.obj.code.lstrip(">>>").strip()
             if not code_striped.startswith("print"):
                 self.obj.code = "print(" + code_striped + ")"
-            output = self.run_python() 
+            output = self.run_python()
         else:
             assert self.obj.syntax in ["sh", "bash"]
             executable = {
