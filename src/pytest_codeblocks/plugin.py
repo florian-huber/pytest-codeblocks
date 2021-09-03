@@ -67,7 +67,7 @@ class Codeblock(pytest.Item):
             output = self.run_python()
         elif self.obj.syntax == "idle":
             code_striped = self.obj.code.lstrip(">>>").strip()
-            if "print" not in code_striped:
+            if not code_striped.startswith("print"):
                 self.obj.code = "print(" + code_striped + ")"
             output = self.run_python() 
         else:
