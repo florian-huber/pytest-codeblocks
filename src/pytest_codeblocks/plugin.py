@@ -28,7 +28,7 @@ class MarkdownFile(pytest.File):
 
     def collect(self):
         for block in extract_from_file(self.fspath):
-            if block.syntax not in ["python", "sh", "bash"]:
+            if block.syntax not in ["python", "sh", "bash", "idle"]:
                 continue
             # https://docs.pytest.org/en/stable/deprecations.html#node-construction-changed-to-node-from-parent
             out = Codeblock.from_parent(parent=self, name=self.name)
