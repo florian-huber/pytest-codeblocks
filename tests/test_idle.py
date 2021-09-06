@@ -47,6 +47,7 @@ def test_idle_expected_return_fail(testdir):
     result = testdir.runpytest("--codeblocks")
     result.assert_outcomes(failed=1)
 
+    
 def test_idle_expected_return(testdir):
     string = """
     ```idle-return
