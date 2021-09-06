@@ -108,7 +108,7 @@ def extract_from_buffer(f, max_num_lines: int = 10000):
                     out[-1].expected_output,
                     out[-1].expect_exception,
                 )
-            elif keyword in ["expect-exception", "expect-error", "expect-return"]:
+            elif keyword in ["expect-exception", "expect-error"]:
                 out.append(
                     CodeBlock(
                         "".join(code_block), lineno, syntax, expect_exception=True
