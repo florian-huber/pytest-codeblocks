@@ -89,8 +89,21 @@ a + 1
 You can also define the expected output of a code block:
 ````markdown
 This
-```sh
+```python
 print(1 + 3)
+```
+gives
+<!--pytest-codeblocks:expected-output-->
+```
+4
+```
+````
+
+Or do the same for a code block resembling a Python command in IDLE:
+````markdown
+This
+```idle
+>>> 1 + 3
 ```
 gives
 <!--pytest-codeblocks:expected-output-->
