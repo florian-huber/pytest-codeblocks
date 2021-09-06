@@ -61,4 +61,4 @@ def test_expected_output(testdir):
     """
     testdir.makefile(".md", string)
     result = testdir.runpytest("--codeblocks")
-    result.assert_outcomes(passed=1)
+    result.assert_outcomes(passed=5)
