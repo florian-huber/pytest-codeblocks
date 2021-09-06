@@ -64,6 +64,7 @@ def test_shell_expect_output(testdir):
     result.assert_outcomes(passed=1)
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="does not run on windows")
 def test_shell_expect_output_fail(testdir):
     string = """
     ```sh
@@ -79,6 +80,7 @@ def test_shell_expect_output_fail(testdir):
     result.assert_outcomes(failed=1)
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="does not run on windows")
 def test_bash(testdir):
     string = """
     ```bash
