@@ -38,8 +38,7 @@ def test_idle_expect_fail_passed(testdir):
 
 def test_idle_expected_return_fail(testdir):
     string = """
-    <!--pytest-codeblocks:expect-return-->
-    ```idle
+    ```idle-return
     >>> 5 + 7
     13
     ```
@@ -50,8 +49,7 @@ def test_idle_expected_return_fail(testdir):
 
 def test_idle_expected_return(testdir):
     string = """
-    <!--pytest-codeblocks:expect-return-->
-    ```idle
+    ```idle-return
     >>> 5 + 7
     12
     ```
