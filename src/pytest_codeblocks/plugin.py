@@ -72,6 +72,15 @@ class Codeblock(pytest.Item):
             else:
                 self.obj.code = code_striped
             output = self.run_python()
+        elif self.obj.syntax == "idle-return":
+            assert len(self.obj.code) == 2, "Expect input and return line
+            code_striped = self.obj.code[0].lstrip(">>>").strip()
+            if not code_striped.startswith("print"):
+                self.obj.code = "print(" + code_striped + ")"
+            else:
+                self.obj.code = code_striped
+            self.obj.expected_output = self.obj.code[1]
+            output = self.run_python()
         else:
             assert self.obj.syntax in ["sh", "bash"]
             executable = {
