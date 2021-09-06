@@ -28,7 +28,7 @@ class MarkdownFile(pytest.File):
 
     def collect(self):
         for block in extract_from_file(self.fspath):
-            if block.syntax not in ["python", "sh", "bash", "idle"]:
+            if block.syntax not in ["python", "sh", "bash", "idle", "idle-return"]:
                 continue
             # https://docs.pytest.org/en/stable/deprecations.html#node-construction-changed-to-node-from-parent
             out = Codeblock.from_parent(parent=self, name=self.name)
@@ -67,10 +67,16 @@ class Codeblock(pytest.Item):
             output = self.run_python()
         elif self.obj.syntax == "idle":
             code_striped = self.obj.code.lstrip(">>>").strip()
+            self.obj.code = code_striped
+            output = self.run_python()
+        elif self.obj.syntax == "idle-return":
+            assert len(self.obj.code) == 2, "Expect input and return line"
+            code_striped = self.obj.code[0].lstrip(">>>").strip()
             if not code_striped.startswith("print"):
                 self.obj.code = "print(" + code_striped + ")"
             else:
                 self.obj.code = code_striped
+            self.obj.expected_output = self.obj.code[1]
             output = self.run_python()
         else:
             assert self.obj.syntax in ["sh", "bash"]
