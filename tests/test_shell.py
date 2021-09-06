@@ -1,3 +1,7 @@
+import sys
+import pytest
+
+
 def test_shell(testdir):
     string = """
     Lorem ipsum
@@ -49,6 +53,7 @@ def test_shell_expect_fail_passed(testdir):
     result.assert_outcomes(failed=1)
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="does not run on windows")
 def test_shell_expect_output(testdir):
     string = """
     ```sh
