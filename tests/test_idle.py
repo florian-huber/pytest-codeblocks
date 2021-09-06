@@ -15,7 +15,7 @@ def test_idle_fail(testdir):
     string = """
     ```idle
     >>> print("abc)
-    SyntaxError: 
+    SyntaxError:
     ```
     """
     testdir.makefile(".md", string)
@@ -28,7 +28,7 @@ def test_idle_expect_fail_passed(testdir):
     <!--pytest-codeblocks:expect-error-->
     ```idle
     >>> print("abc)
-    SyntaxError: 
+    SyntaxError:
     ```
     """
     testdir.makefile(".md", string)
