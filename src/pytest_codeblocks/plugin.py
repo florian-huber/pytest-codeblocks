@@ -77,7 +77,7 @@ class Codeblock(pytest.Item):
                 self.obj.code = "print(" + code_striped + ")"
             else:
                 self.obj.code = code_striped
-            self.obj.expected_output = expected_return
+            self.obj.expected_output = expected_return + "\n"
             output = self.run_python()
         else:
             assert self.obj.syntax in ["sh", "bash"]
