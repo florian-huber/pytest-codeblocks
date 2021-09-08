@@ -4,9 +4,5 @@
 “my text”
 
 ```
->>> print = “my text”
->>> else = "my text"
->>> sehr_wichtig = "my text"
->>> übermäßig_wichtig = "my text"
->>> ImportantText = "my text"
+>>> s = “my text” 
 ```
