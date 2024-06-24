@@ -28,7 +28,7 @@ class MarkdownFile(pytest.File):
 
     def collect(self):
         for block in extract_from_file(self.fspath):
-            if block.syntax not in ["python", "sh", "bash"]:
+            if block.syntax not in ["python", "sh", "bash", "idle", "idle-return"]:
                 continue
             # https://docs.pytest.org/en/stable/deprecations.html#node-construction-changed-to-node-from-parent
             out = Codeblock.from_parent(parent=self, name=self.name)
@@ -43,25 +43,42 @@ class Codeblock(pytest.Item):
 
     # TODO for python 3.7+, stdout=subprocess.PIPE can be replaced by
     #      capture_output=True
+    def run_python(self):
+        if self.obj.expect_exception:
+            with pytest.raises(Exception):
+                exec(self.obj.code, {"__MODULE__": "__main__"})
+        else:
+            with stdout_io() as s:
+                try:
+                    # https://stackoverflow.com/a/62851176/353337
+                    exec(self.obj.code, {"__MODULE__": "__main__"})
+                except Exception as e:
+                    raise RuntimeError(
+                        f"{self.name}, line {self.obj.lineno}:\n```\n"
+                        + self.obj.code
+                        + "```\n\n"
+                        + f"{e}"
+                    )
+            return s.getvalue()
+
     def runtest(self):
         output = None
         if self.obj.syntax == "python":
-            if self.obj.expect_exception:
-                with pytest.raises(Exception):
-                    exec(self.obj.code, {"__MODULE__": "__main__"})
+            output = self.run_python()
+        elif self.obj.syntax == "idle":
+            code_striped = self.obj.code.lstrip(">>>").strip()
+            self.obj.code = code_striped
+            output = self.run_python()
+        elif self.obj.syntax == "idle-return":
+            assert len(self.obj.code.splitlines()) == 2, "Expect input and return line"
+            code_striped = self.obj.code.splitlines()[0].lstrip(">>>").strip()
+            expected_return = self.obj.code.splitlines()[1]
+            if not code_striped.startswith("print"):
+                self.obj.code = "print(" + code_striped + ")"
             else:
-                with stdout_io() as s:
-                    try:
-                        # https://stackoverflow.com/a/62851176/353337
-                        exec(self.obj.code, {"__MODULE__": "__main__"})
-                    except Exception as e:
-                        raise RuntimeError(
-                            f"{self.name}, line {self.obj.lineno}:\n```\n"
-                            + self.obj.code
-                            + "```\n\n"
-                            + f"{e}"
-                        )
-                output = s.getvalue()
+                self.obj.code = code_striped
+            self.obj.expected_output = expected_return + "\n"
+            output = self.run_python()
         else:
             assert self.obj.syntax in ["sh", "bash"]
             executable = {
